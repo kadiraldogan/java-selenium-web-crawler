@@ -15,13 +15,15 @@ public class crawl {
 
     public static String tendNum=null, quality=null, placeWork=null, tendType=null;
     public static int count=1;
+    static final String URL = "https://www.ilan.gov.tr/ilan/kategori/9/ihale-duyurulari?txv=9&currentPage=1";
+
     public static void main (String[] args) throws InterruptedException {
         List<WebElement> searchPageResults;
         List<String> allLink = new ArrayList<>();
-        System.setProperty("webdriver.chrome.driver", "C:/Users/kadir/FrameWork/chromeDriver/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "libs//chromedriver.exe");
         WebDriver driver = new ChromeDriver();
         driver.manage().window();
-        driver.get("https://www.ilan.gov.tr/ilan/kategori/9/ihale-duyurulari?txv=9&currentPage=1");
+        driver.get(URL);
         for(int i = 1; i <= 20; i++) {
             driver.get("https://www.ilan.gov.tr/ilan/kategori/9/ihale-duyurulari?txv=9&currentPage=" + i);
             Thread.sleep(2000);
@@ -41,7 +43,7 @@ public class crawl {
         List<WebElement> searchPageResults;
         List<String> allTitle = new ArrayList<>();
         List<String> allDesc = new ArrayList<>();
-        System.setProperty("webdriver.chrome.driver", "C:/Users/kadir/Selenium/chromeDriver/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "libs//chromedriver.exe");
         WebDriver driver = new ChromeDriver();
         driver.manage().window();
         driver.get(url);
@@ -55,14 +57,12 @@ public class crawl {
             allDesc.add(link.getText());
         }
         for(int i=0; i<allTitle.size(); i++)   {
-            if(allTitle.get(i).equals("İhale Kayıt No"))
-                tendNum=allDesc.get(i);
-            else if(allTitle.get(i).equals("Niteliği, Türü ve Miktarı"))
-                quality=allDesc.get(i);
-            else if(allTitle.get(i).equals("İşin Yapılacağı Yer"))
-                placeWork=allDesc.get(i);
-            else if(allTitle.get(i).equals("İhale Türü"))
-                tendType=allDesc.get(i);
+            switch (allTitle.get(i)) {
+                case "İhale Kayıt No" -> tendNum = allDesc.get(i);
+                case "Niteliği, Türü ve Miktarı" -> quality = allDesc.get(i);
+                case "İşin Yapılacağı Yer" -> placeWork = allDesc.get(i);
+                case "İhale Türü" -> tendType = allDesc.get(i);
+            }
         }
         driver.quit();
     }
